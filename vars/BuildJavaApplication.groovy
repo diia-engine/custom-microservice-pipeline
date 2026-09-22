@@ -63,7 +63,7 @@ void call() {
 
     node(context.jenkinsAgentLabel) {
         [
-                'checkout',
+                'checkout-repository',
                 'detect-build-configuration',
                 'maven-build',
                 'configure-openShift-build',

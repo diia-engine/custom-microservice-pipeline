@@ -4,7 +4,7 @@ import com.epam.digital.data.platform.pipelines.stages.ProjectType
 import com.epam.digital.data.platform.pipelines.stages.Stage
 
 @Stage(
-        name = "checkout",
+        name = "checkout-repository",
         buildTool = ["any"],
         type = [ProjectType.APPLICATION]
 )
