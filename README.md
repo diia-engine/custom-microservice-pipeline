@@ -4,20 +4,7 @@
 
 Jenkins Shared Library для збирання та розгортання Java-застосунків.
 
-## Підключення pipeline до Jenkins
-
-Pipeline не створюється автоматично. Для його використання необхідно вручну
-створити в Jenkins параметризований Pipeline job.
-
-Як Pipeline script потрібно вказати:
-
-```groovy
-@Library(['edp-library-stages', 'edp-library-pipelines']) _
-
-BuildJavaApplication()
-```
-
-### Shared Library
+## Передумови: Shared Library
 
 Щоб pipeline був доступний для виконання, у репозиторії
 `registry-regulations-publication-pipeline` мають бути додані всі необхідні
@@ -45,7 +32,10 @@ registry-regulations-publication-pipeline/
 Stage-класи знаходяться в `buildJavaApplication` та використовуються через
 існуючий `StageFactory`.
 
-## Створення Jenkins Pipeline job
+## Підключення pipeline до Jenkins
+
+Pipeline не створюється автоматично. Для його використання необхідно вручну
+створити в Jenkins параметризований Pipeline job.
 
 При створенні job необхідно увімкнути **This project is parameterized** та
 додати такі параметри:
@@ -59,6 +49,14 @@ Stage-класи знаходяться в `buildJavaApplication` та вико�
 
 Ці параметри **обов'язково мають бути налаштовані в Jenkins job**, оскільки
 pipeline отримує їх через Jenkins build parameters.
+
+В якості Pipeline script необхідно вказати:
+
+```groovy
+@Library(['edp-library-stages', 'edp-library-pipelines']) _
+
+BuildJavaApplication()
+```
 
 ### `HELM_VALUES`
 
@@ -158,7 +156,7 @@ Helm.upgrade(
 )
 ```
 
-Перед викликом `Helm.upgrade` формується карта стандартних параметрів:
+Перед викликом `Helm.upgrade` формується мапа стандартних параметрів:
 
 | Helm key | Значення |
 | --- | --- |
@@ -170,7 +168,7 @@ Helm.upgrade(
 | `nexusPullSecret` | `context.dockerRegistry.PUSH_SECRET` |
 | `keycloak.url` | `${context.keycloak.url}/auth` |
 
-Після формування стандартних параметрів до карти додаються значення з
+Після формування стандартних параметрів до мапи додаються значення з
 `HELM_VALUES`:
 
 ```groovy
@@ -183,7 +181,7 @@ parametersMap.putAll(context.helmValues)
 
 ### Перезапис стандартних параметрів
 
-`HELM_VALUES` додається **після** стандартних параметрів. Тому параметр з таким
+Мапа `HELM_VALUES` додається **після** стандартних параметрів. Тому параметр з таким
 самим ключем перезапише стандартне значення pipeline.
 
 Не рекомендується перезаписувати системні параметри, зокрема:
